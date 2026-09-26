@@ -17,17 +17,15 @@ int main(int argc, char *argv[])
     }
     else {
         printf("Starting pid info...\n");
+
+        printf("Please Enter in Pid: \n");
+        scanf("%s", user_input);
         while((entry=readdir(path)))
         {
-            printf("Please Enter in Pid: \n");
-            scanf("%s", user_input);
-            for(int i = 0; strcmp(entry->d_name, user_input); i++){
-                int sum = entry->d_name[i];
-
-                if(sum == 0){
-                    printf("PID FOUND!\n");
-                }
-            }
+            if( strcmp(entry->d_name, user_input) == 0)
+            {
+                printf("MATCH: %s, %s\n", entry->d_name, user_input);
+            };
         }
     }
 
