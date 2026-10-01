@@ -4,13 +4,22 @@
 #include <sys/types.h>
 #include <string.h>
 
+void check_pids(char *dirname) {
+    struct dirent *d;
+    DIR *dir = opendir(dirname);
+    while((d = readdir(dir)) != NULL) {
+        printf("%3s\n", d->d_name);
+    }
+}
+
 int main() 
 {
     char Path[200] = "/proc/";
     char user_input[200];
 
     // grab user input pid.
-    printf("Enter Pid: \n");
+    check_pids(Path);
+    printf("\nEnter Pid: \n");
     scanf("%s", user_input);
     printf("USER_INPUT: %s\n", user_input);
 
@@ -23,60 +32,20 @@ int main()
     DIR *path;
     path = opendir(NewPath);
 
-    if(path == NULL)
-    {
-        printf("Directory doesn't exist.\n");
-        return -1;
-    }
-    else {
-        while((entry=readdir(path)))
-        {
-        printf("%s\n", entry->d_name);
-        printf("Starting pid info...\n");
+    printf("Please Enter in Pid: \n");
+    scanf("%s", user_input);
 
-        printf("Please Enter in Pid: \n");
-        scanf("%s", user_input);
-        while((entry=readdir(path)))
-        {
-            if( strcmp(entry->d_name, user_input) == 0)
-            {
-                printf("MATCH: %s, %s\n", entry->d_name, user_input);
-            };
+    // key for checking if path is emty 
+    int key = 0;
+    while((entry=readdir(path)) != NULL)
+    {
+        // not sure if it would help but add switch statment in stead of alot of if statements
+        if(++key > 2) {
+            printf("entry->d_name: %s\n", entry->d_name);
+        } else if(key <= 2) {
+            printf("EMPTY DIR\n");
+        } else {
+            readdir(path);
         }
     }
 }
-
-// int main(int argc, char *argv[])
-// {
-//     pid_t user_input[2000];
-//     struct dirent *entry;
-//
-//     DIR *path; 
-//     path = opendir("/proc/");
-//
-//     if(path == NULL)
-//     {
-//         printf("Directory doesn't exist.\n");
-//         return -1;
-//     }
-//     else {
-//         printf("Starting pid info...\n");
-//         printf("Please Enter in Pid: \n");
-//         scanf("%d", user_input);
-//
-//         while((entry=readdir(path)))
-//         {
-//             if(strcmp(entry->d_name, (char *)user_input) == 0)
-//             {
-//                 printf("MATCH: %s, %d\n", entry->d_name, *user_input);
-//                 char *newPath = strcat(path, user_input);
-//
-//                 path = opendir(newPath);
-//                 printf("NEW DIR OPENED: %s\n", path);
-//             }
-//         }
-//     }
-//
-//     closedir(path);
-//     return 0;
-// }
