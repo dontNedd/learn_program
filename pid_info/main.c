@@ -1,36 +1,72 @@
 #include <stdio.h>
 #include <stdbool.h>
-#include <string.h>
 #include <dirent.h>
+#include <sys/types.h>
+#include <string.h>
 
-int main(int argc, char *argv[])
+int main() 
 {
-    char user_input[2000];
+    char Path[200] = "/proc/";
+    char user_input[200];
+
+    // grab user input pid.
+    printf("Enter Pid: \n");
+    scanf("%s", user_input);
+    printf("USER_INPUT: %s\n", user_input);
+
+    // cat path and userinput strings
+    char *NewPath = strcat(Path, user_input);
+    printf("NEW PATH: %s\n", NewPath);
+
+    // need to add strings in to DIR.
     struct dirent *entry;
+    DIR *path;
+    path = opendir(NewPath);
 
-    DIR *path; 
-    path = opendir("/proc/");
-
-    if(path == NULL){
+    if(path == NULL)
+    {
         printf("Directory doesn't exist.\n");
         return -1;
     }
     else {
-        printf("Starting pid info...\n");
         while((entry=readdir(path)))
         {
-            printf("Please Enter in Pid: \n");
-            scanf("%s", user_input);
-            for(int i = 0; strcmp(entry->d_name, user_input); i++){
-                int sum = entry->d_name[i];
-
-                if(sum == 0){
-                    printf("PID FOUND!\n");
-                }
-            }
+        printf("%s\n", entry->d_name);
         }
     }
-
-    closedir(path);
-    return 0;
 }
+
+// int main(int argc, char *argv[])
+// {
+//     pid_t user_input[2000];
+//     struct dirent *entry;
+//
+//     DIR *path; 
+//     path = opendir("/proc/");
+//
+//     if(path == NULL)
+//     {
+//         printf("Directory doesn't exist.\n");
+//         return -1;
+//     }
+//     else {
+//         printf("Starting pid info...\n");
+//         printf("Please Enter in Pid: \n");
+//         scanf("%d", user_input);
+//
+//         while((entry=readdir(path)))
+//         {
+//             if(strcmp(entry->d_name, (char *)user_input) == 0)
+//             {
+//                 printf("MATCH: %s, %d\n", entry->d_name, *user_input);
+//                 char *newPath = strcat(path, user_input);
+//
+//                 path = opendir(newPath);
+//                 printf("NEW DIR OPENED: %s\n", path);
+//             }
+//         }
+//     }
+//
+//     closedir(path);
+//     return 0;
+// }
