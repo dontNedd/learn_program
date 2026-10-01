@@ -32,6 +32,16 @@ int main()
         while((entry=readdir(path)))
         {
         printf("%s\n", entry->d_name);
+        printf("Starting pid info...\n");
+
+        printf("Please Enter in Pid: \n");
+        scanf("%s", user_input);
+        while((entry=readdir(path)))
+        {
+            if( strcmp(entry->d_name, user_input) == 0)
+            {
+                printf("MATCH: %s, %s\n", entry->d_name, user_input);
+            };
         }
     }
 }
