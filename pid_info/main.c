@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <dirent.h>
@@ -12,10 +13,22 @@ void check_pids(char *dirname) {
     }
 }
 
+void char_plus_string(char *s) {
+    char c = "/";
+    // moves a pointer to the end of the string
+    while(*s++);
+    // substract the "0" at the end of *s string
+    *(s - 1) = c;
+    // readd the null terminator to mark new end of string
+    *s = '\0';
+
+}
+
 int main() 
 {
     char Path[200] = "/proc/";
     char user_input[200];
+    char key[200] = "cmdline";
 
     // grab user input pid.
     check_pids(Path);
@@ -25,7 +38,6 @@ int main()
 
     // cat path and userinput strings
     char *NewPath = strcat(Path, user_input);
-    printf("NEW PATH: %s\n", NewPath);
 
     // need to add strings in to DIR.
     struct dirent *entry;
@@ -36,16 +48,17 @@ int main()
     scanf("%s", user_input);
 
     // key for checking if path is emty 
-    int key = 0;
     while((entry=readdir(path)) != NULL)
     {
-        // not sure if it would help but add switch statment in stead of alot of if statements
-        if(++key > 2) {
-            printf("entry->d_name: %s\n", entry->d_name);
-        } else if(key <= 2) {
-            printf("EMPTY DIR\n");
-        } else {
-            readdir(path);
+        if(strcmp(entry->d_name, key) == 0) {
+            printf("Found Key: %s\n", key);
+            printf("d_name: %s\n", entry->d_name);
+
+            // need to a / in the key string.
+
+            char *temp = strcat(NewPath, key);
+            printf("NEW PATH IN IF: %s\n", temp);
+
         }
     }
 }
